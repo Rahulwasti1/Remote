@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "184844856033",
+    "firebase_url": "https://ecomitra-71a79-default-rtdb.firebaseio.com",
+    "project_id": "ecomitra-71a79",
+    "storage_bucket": "ecomitra-71a79.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:184844856033:android:83588a1bef7db90ffe25a0",
+        "android_client_info": {
+          "package_name": "com.example.eco_mitra"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAstHTj_c4Fo7ziJK93amQ2nyeCs8M3Xg8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

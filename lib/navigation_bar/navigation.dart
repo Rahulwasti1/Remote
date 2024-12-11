@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:eco_mitra/screens/home.dart';
-import 'package:eco_mitra/screens/schedule.dart';
-import 'package:eco_mitra/screens/location.dart';
-import 'package:eco_mitra/screens/profile.dart';
-import 'package:eco_mitra/screens/driver.dart';
+import 'package:eco_mitra/admin/home.dart';
+import 'package:eco_mitra/admin/schedule.dart';
+import 'package:eco_mitra/admin/location.dart';
+import 'package:eco_mitra/admin/profile.dart';
+import 'package:eco_mitra/admin/driver.dart';
 
 void main() {
   runApp(const MyApp());

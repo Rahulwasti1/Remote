@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class LocationScreen extends StatefulWidget {
@@ -8,35 +9,21 @@ class LocationScreen extends StatefulWidget {
 }
 
 class _LocationScreenState extends State<LocationScreen> {
-  late TextEditingController nameController;
-  late TextEditingController addressController;
-  late TextEditingController longitudeController;
-  late TextEditingController latitudeController;
-
-  String locationName = '';
-  String address = '';
-  String longitude = '';
-  String latitude = '';
+  // Placeholder controllers for form fields
+  late TextEditingController locationController = TextEditingController();
+  late TextEditingController addressController = TextEditingController();
+  late TextEditingController longitudeController = TextEditingController();
+  late TextEditingController latitudeController = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-    nameController = TextEditingController();
-    addressController = TextEditingController();
-    longitudeController = TextEditingController();
-    latitudeController = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    nameController.dispose();
+  void dispose(){
+    locationController.dispose();
     addressController.dispose();
     longitudeController.dispose();
     latitudeController.dispose();
     super.dispose();
   }
 
-  // Method to show the dialog and return the input values
   Future<void> openDialog() async {
     await showDialog(
       context: context,
@@ -52,11 +39,11 @@ class _LocationScreenState extends State<LocationScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
-              controller: nameController,
+              controller: locationController,
               decoration: InputDecoration(
                 hintText: 'Enter Location Name',
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0), // Set the radius here
+                  borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
             ),
@@ -66,7 +53,7 @@ class _LocationScreenState extends State<LocationScreen> {
               decoration: InputDecoration(
                 hintText: 'Enter Location Address',
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0), // Set the radius here
+                  borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
             ),
@@ -76,7 +63,7 @@ class _LocationScreenState extends State<LocationScreen> {
               decoration: InputDecoration(
                 hintText: 'Longitude',
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0), // Set the radius here
+                  borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
               keyboardType: TextInputType.number,
@@ -87,20 +74,18 @@ class _LocationScreenState extends State<LocationScreen> {
               decoration: InputDecoration(
                 hintText: 'Latitude',
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0), // Set the radius here
+                  borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
               keyboardType: TextInputType.number,
             ),
           ],
         ),
-
-
         actions: [
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red, // Set background to grey for cancel button
-              foregroundColor: Colors.white, // Text color white
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -108,36 +93,56 @@ class _LocationScreenState extends State<LocationScreen> {
             ),
             child: Text("Cancel", style: TextStyle(fontSize: 16)),
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.of(context).pop(); // Close the dialog
             },
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.green, // Set background color to green for submit
-              foregroundColor: Colors.white, // Text color white
+              backgroundColor: Colors.green,
+              foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0), // Set the radius here
+                borderRadius: BorderRadius.circular(10.0),
               ),
               padding: EdgeInsets.symmetric(horizontal: 35),
             ),
             child: Text("Submit", style: TextStyle(fontSize: 16)),
-            onPressed: () {
-              if (nameController.text.isEmpty ||
+            onPressed: () async {
+              if (locationController.text.isEmpty ||
                   addressController.text.isEmpty ||
                   longitudeController.text.isEmpty ||
                   latitudeController.text.isEmpty) {
-                // Show error if any field is empty
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text('Please fill all fields')),
                 );
               } else {
-                setState(() {
-                  locationName = nameController.text;
-                  address = addressController.text;
-                  longitude = longitudeController.text;
-                  latitude = latitudeController.text;
-                });
-                Navigator.of(context).pop();
+                try {
+                  CollectionReference collRef =
+                  FirebaseFirestore.instance.collection('location');
+                  await collRef.add({
+                    'locationname': locationController.text,
+                    'locationaddress': addressController.text,
+                    'longitude': longitudeController.text,
+                    'latitude': latitudeController.text,
+                  });
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Driver added successfully!')),
+                  );
+
+                  setState(() {
+                    locationController.clear();
+                    addressController.clear();
+                    longitudeController.clear();
+                    latitudeController.clear();
+                  });
+
+                  Navigator.of(context).pop();
+                } catch (e) {
+                  print("Error adding driver: $e");
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Failed to add driver: $e')),
+                  );
+                }
               }
             },
           ),
@@ -184,13 +189,6 @@ class _LocationScreenState extends State<LocationScreen> {
               ),
             ),
             SizedBox(height: 20),
-            // Display the entered location details after submission
-            if (locationName.isNotEmpty) ...[
-              Text("Location Name: $locationName", style: TextStyle(fontSize: 18)),
-              Text("Address: $address", style: TextStyle(fontSize: 18)),
-              Text("Longitude: $longitude", style: TextStyle(fontSize: 18)),
-              Text("Latitude: $latitude", style: TextStyle(fontSize: 18)),
-            ]
           ],
         ),
       ),

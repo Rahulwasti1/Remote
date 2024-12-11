@@ -1,3 +1,6 @@
+import 'dart:ffi';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -12,9 +15,20 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   // List of locations
   final List<String> _locations = ['Anamnagar', 'Sankhamul', 'Thapagaun', 'Buddhanagar'];
 
+  // Making controller for input field
+  late TextEditingController locationController = TextEditingController();
+  late TextEditingController dateController = TextEditingController();
+
   // Selected location and date-time
   String? _selectedLocation;
   String? _selectedDateTime;
+
+  @override
+  void dispose(){
+    locationController.dispose();
+    dateController.dispose();
+    super.dispose();
+  }
 
   Future<void> pickDateTime(BuildContext context) async {
     // Open Date Picker
@@ -151,7 +165,41 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                   ),
                   padding: EdgeInsets.symmetric(vertical: 10), // Internal padding for the button
                 ),
-                onPressed: () {
+                
+                
+                onPressed: () async {
+                  if (_selectedLocation == null || _selectedDateTime == null ){
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("Please fill all fields")),
+                    );
+                  }
+                  else{
+                    try{
+                      CollectionReference collRef = FirebaseFirestore.instance.collection('ScheduleCollection');
+                      await collRef.add({
+                        'DateTime': _selectedLocation,
+                        'locationName': _selectedDateTime,
+                      });
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("Location added successfully!")),
+                      );
+
+                      setState(() {
+                        dateController.clear();
+                        locationController.clear();
+                      });
+
+                      Navigator.of(context).pop();
+                    }
+                    catch(e) {
+                      print("Error adding location: $e");
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                              content: Text('Failed to add location: $e')));
+                    }
+                  }
+
                   print("Add New Schedule");
                 },
                 child: Text(

@@ -182,7 +182,11 @@ class _DriverScreenState extends State<DriverScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.add, color: Colors.black),
+                    Image.asset(
+                      "assets/icons/more.png",
+                      height: 25,
+                      width: 40,
+                    ),
                     SizedBox(width: 3),
                     Text(
                       "Add Driver",

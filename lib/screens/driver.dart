@@ -1,15 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'firebase_options.dart';
-
-import '../main.dart';
-
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(const MyApp());
-}
 
 class DriverScreen extends StatefulWidget {
   const DriverScreen({super.key});
@@ -28,7 +18,6 @@ class _DriverScreenState extends State<DriverScreen> {
   @override
   void initState() {
     super.initState();
-    // Initialize the controllers
     nameController = TextEditingController();
     phoneController = TextEditingController();
     emailController = TextEditingController();
@@ -37,7 +26,6 @@ class _DriverScreenState extends State<DriverScreen> {
 
   @override
   void dispose() {
-    // Dispose the controllers when the widget is destroyed
     nameController.dispose();
     phoneController.dispose();
     emailController.dispose();
@@ -45,7 +33,6 @@ class _DriverScreenState extends State<DriverScreen> {
     super.dispose();
   }
 
-  // Method to show the dialog and return the input values
   Future<void> openDialog() async {
     await showDialog(
       context: context,
@@ -132,13 +119,11 @@ class _DriverScreenState extends State<DriverScreen> {
                   phoneController.text.isEmpty ||
                   emailController.text.isEmpty ||
                   passwordController.text.isEmpty) {
-                // Show error if any field is empty
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text('Please fill all fields')),
                 );
               } else {
                 try {
-                  // Add data to Firestore if fields are not empty
                   CollectionReference collRef =
                   FirebaseFirestore.instance.collection('AddDriver');
                   await collRef.add({
@@ -152,7 +137,6 @@ class _DriverScreenState extends State<DriverScreen> {
                     SnackBar(content: Text('Driver added successfully!')),
                   );
 
-                  // Clear text fields after submitting
                   setState(() {
                     nameController.clear();
                     phoneController.clear();
@@ -162,7 +146,6 @@ class _DriverScreenState extends State<DriverScreen> {
 
                   Navigator.of(context).pop();
                 } catch (e) {
-                  // Catch and log errors
                   print("Error adding driver: $e");
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Failed to add driver: $e')),
@@ -187,7 +170,7 @@ class _DriverScreenState extends State<DriverScreen> {
               alignment: Alignment.topCenter,
               child: OutlinedButton(
                 onPressed: () async {
-                  await openDialog(); // Open the dialog to get input
+                  await openDialog();
                 },
                 style: OutlinedButton.styleFrom(
                   padding: EdgeInsets.symmetric(vertical: 4, horizontal: 10),
@@ -199,11 +182,7 @@ class _DriverScreenState extends State<DriverScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset(
-                      "assets/icons/more.png",
-                      height: 25,
-                      width: 40,
-                    ),
+                    Icon(Icons.add, color: Colors.black),
                     SizedBox(width: 3),
                     Text(
                       "Add Driver",
@@ -214,7 +193,6 @@ class _DriverScreenState extends State<DriverScreen> {
               ),
             ),
             SizedBox(height: 20),
-            // Display the entered driver details after submission (optional)
           ],
         ),
       ),

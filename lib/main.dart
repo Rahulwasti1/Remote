@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'navigation_bar/navigation.dart'; // Import your navigation logic here
-
+import 'Login_Signup/signup.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // Ensure Flutter is initialized properly
   await Firebase.initializeApp(); // Initialize Firebase once
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: const MyHomePage(), // Use your navigation widget
+      home: const signup(), // Use your navigation widget
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class driverhome extends StatefulWidget {
   const driverhome({super.key});
@@ -10,6 +11,8 @@ class driverhome extends StatefulWidget {
 class _driverhomeState extends State<driverhome> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      body: Padding(padding: EdgeInsets.only(top: 1)),
+    );
   }
 }

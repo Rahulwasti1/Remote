@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
 class DriverScreen extends StatefulWidget {
   const DriverScreen({super.key});
@@ -121,11 +120,7 @@ class _DriverScreenState extends State<DriverScreen> {
                   emailController.text.isEmpty ||
                   passwordController.text.isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(elevation: 0,
-                      behavior: SnackBarBehavior.floating,
-                      backgroundColor: Colors.transparent,
-                      content: AwesomeSnackbarContent(message: 'Please fill all fields', title: 'Warning', contentType: ContentType.warning),
-                    margin: EdgeInsets.only(top: 10),),
+                  SnackBar(content: Text('Please fill all fields')),
                 );
               } else {
                 try {
